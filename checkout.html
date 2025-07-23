@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Royce Threads - Premium clothing for men and women. Checkout securely and stylishly." />
+  <meta name="keywords" content="royce threads, men clothing, women clothing, fashion, checkout" />
+  <meta name="author" content="Royce Threads" />
+  <title>Royce Threads | Checkout</title>
+
+  <!-- Styles & Fonts -->
+  <link rel="stylesheet" href="Style/checkout.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Top Bar with Logo and Exit -->
+  <div class="top-bar">
+    <img src="https://res.cloudinary.com/dysfwxbhk/image/upload/v1753308746/logo_qfevxj.png" style="width: 100px"
+      alt="Royce Threads Logo" class="logo" />
+    <button class="exit-button" onclick="closeCheckout()">
+      <img src="https://res.cloudinary.com/dysfwxbhk/image/upload/v1753309034/exit_chudvy.svg" alt="Close" />
+    </button>
+  </div>
+
+  <!-- Navigation Header -->
+  <nav class="nav-header">
+    <div class="nav-container royce">
+      <h2>Royce Threads</h2>
+    </div>
+  </nav>
+
+  <!-- Main Checkout Form -->
+  <main class="checkout-wrapper">
+    <form id="checkoutForm" class="checkout-form">
+
+      <div class="checkout-header-bar">
+        <h2>Order Summary</h2>
+        <span id="orderTotal" class="total-amount">PKR 0</span>
+      </div>
+
+      <!-- Contact Information -->
+      <section class="checkout-section">
+        <h2><i class="material-icons">person</i> Contact Information</h2>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required />
+
+        <label class="radio-optiontwo">
+          <input type="radio" name="newsletter" />
+          Email me with news and offers
+        </label>
+      </section>
+
+      <!-- Shipping Details -->
+      <section class="checkout-section">
+        <h2><i class="material-icons">local_shipping</i> Shipping Details</h2>
+
+        <label for="country">Country</label>
+        <select id="country" name="country" required>
+          <option value="Pakistan">Pakistan</option>
+        </select>
+
+        <div class="row">
+          <div>
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" required />
+          </div>
+          <div>
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" required />
+          </div>
+        </div>
+
+        <label for="company">Company (optional)</label>
+        <input type="text" id="company" name="company" />
+
+        <label for="address">Address</label>
+        <input type="text" id="address" name="address" required />
+
+        <label for="apartment">Apartment, suite, etc. (optional)</label>
+        <input type="text" id="apartment" name="apartment" />
+
+
+        <div class="row">
+          <div>
+            <label for="province">Province</label>
+            <select id="province" name="province" required>
+              <option value="">Select Province</option>
+              <option value="Punjab">Punjab</option>
+              <option value="Sindh">Sindh</option>
+              <option value="Khyber Pakhtunkhwa">Khyber Pakhtunkhwa</option>
+              <option value="Balochistan">Balochistan</option>
+              <option value="Islamabad Capital Territory">Islamabad Capital Territory</option>
+              <option value="Gilgit-Baltistan">Gilgit-Baltistan</option>
+              <option value="Azad Jammu & Kashmir">Azad Jammu & Kashmir</option>
+            </select>
+          </div>
+          <div>
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" placeholder="Enter your city" required />
+          </div>
+        </div>
+
+        <div>
+          <label for="postalCode">Postal Code</label>
+          <input type="text" id="postalCode" name="postalCode" />
+        </div>
+        </div>
+
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" name="phone" required />
+
+        <label class="radio-optiontwo">
+          <input type="radio" name="saveInfo" />
+          Save this information for next time
+        </label>
+      </section>
+
+      <!-- Shipping Method -->
+      <section class="checkout-section">
+        <h2><i class="material-icons">local_post_office</i> Shipping Method</h2>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="shippingMethod" value="Free Shipping" checked />
+            Free Shipping (PKR 0)
+          </label>
+        </div>
+      </section>
+
+      <!-- Payment Method -->
+      <section class="checkout-section">
+        <h2><i class="material-icons">payment</i> Payment Method</h2>
+        <p class="note">All transactions are secure and encrypted.</p>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="paymentMethod" value="Card" />
+            Debit/Credit Card
+          </label>
+          <div id="cardInstructions" style="display: none; margin-top: 1rem;">
+            <p><strong>Send Payment to:</strong></p>
+            <p> <strong>0313-7905224</strong> (Easypaisa Account)</p>
+            <p> <strong>Muhammad Ibraheem</strong></p>
+            <p><strong>Note:</strong> After sending the payment, confirm your order. We will contact you once your
+              payment is verified and your order will be dispatched.</p>
+          </div>
+
+
+          <label class="radio-option">
+            <input type="radio" name="paymentMethod" value="COD" checked />
+            Cash on Delivery (COD)
+          </label>
+        </div>
+      </section>
+
+      <!-- Billing Address -->
+      <section class="checkout-section">
+        <h2><i class="material-icons">home</i> Billing Address</h2>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="billingAddress" value="same" checked />
+            Same as shipping address
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="billingAddress" value="different" />
+            Use a different billing address
+          </label>
+        </div>
+
+        <div id="billingAddressFields" style="display: none; margin-top: 1rem;">
+          <label for="billingCountry">Country</label>
+          <select id="billingCountry" name="billingCountry">
+            <option value="Pakistan">Pakistan</option>
+          </select>
+
+          <div class="row">
+            <div>
+              <label for="billingFirstName">First Name</label>
+              <input type="text" id="billingFirstName" name="billingFirstName" />
+            </div>
+            <div>
+              <label for="billingLastName">Last Name</label>
+              <input type="text" id="billingLastName" name="billingLastName" />
+            </div>
+          </div>
+
+          <label for="billingCompany">Company (optional)</label>
+          <input type="text" id="billingCompany" name="billingCompany" />
+
+          <label for="billingAddress">Address</label>
+          <input type="text" id="billingAddress" name="billingAddress" />
+
+          <label for="billingApartment">Apartment, suite, etc. (optional)</label>
+          <input type="text" id="billingApartment" name="billingApartment" />
+
+          <div>
+            <label for="billingProvince">Province</label>
+            <select id="billingProvince" name="billingProvince">
+              <option value="">Select Province</option>
+              <option value="Punjab">Punjab</option>
+              <option value="Sindh">Sindh</option>
+              <option value="Khyber Pakhtunkhwa">Khyber Pakhtunkhwa</option>
+              <option value="Balochistan">Balochistan</option>
+              <option value="Islamabad Capital Territory">Islamabad Capital Territory</option>
+              <option value="Gilgit-Baltistan">Gilgit-Baltistan</option>
+              <option value="Azad Jammu & Kashmir">Azad Jammu & Kashmir</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="billingCity">City</label>
+            <input type="text" id="billingCity" name="billingCity" placeholder="Enter your city" />
+          </div>
+
+          <label for="billingPostalCode">Postal Code</label>
+          <input type="text" id="billingPostalCode" name="billingPostalCode" />
+
+          <div>
+            <label for="billingPhone">Phone</label>
+            <input type="tel" id="billingPhone" name="billingPhone" />
+          </div>
+        </div> <!-- End of #billingAddressFields -->
+      </section>
+      <!-- Selected Cart Items Section -->
+      <section class="checkout-section cart-items-summary">
+        <h2><i class="material-icons">shopping_cart</i> Your Items</h2>
+        <div id="checkoutCartItems" class="cart-items-container">
+          <!-- JS will insert items here -->
+        </div>
+      </section>
+      </section>
+
+      <div class="checkout-summary-box">
+        <p>Product Total: <strong id="productTotal">PKR 0</strong></p>
+        <p>Delivery Fee: <strong id="deliveryFee">PKR 300</strong></p>
+        <p>Total Charges: <strong id="finalTotal">PKR 0</strong></p>
+      </div>
+
+
+      <!-- Submit -->
+      <button type="submit" class="submit-button">Pay Now</button>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer class="checkout-footer">
+    <p>&copy; 2025 Royce Threads. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Scripts -->
+
+  <script>
+    // Toggle billing address section
+    const billingRadios = document.querySelectorAll('input[name="billingAddress"]');
+    const billingFields = document.getElementById("billingAddressFields");
+    
+    document.getElementById("checkoutForm").addEventListener("submit", function (e) {
+      e.preventDefault(); // prevent actual form submission
+
+      // You may add validation, backend API submission, etc. here
+
+      // Simulate success — redirect to thank you page
+      window.location.href = "thanks.html";
+    });
+
+
+    billingRadios.forEach(radio => {
+      radio.addEventListener("change", () => {
+        if (radio.value === "different" && radio.checked) {
+          billingFields.style.display = "block";
+        } else if (radio.value === "same" && radio.checked) {
+          billingFields.style.display = "none";
+        }
+      });
+    });
+
+    // Toggle card payment instructions
+    const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+    const cardInstructions = document.getElementById("cardInstructions");
+
+    paymentRadios.forEach(radio => {
+      radio.addEventListener("change", () => {
+        if (radio.value === "Card" && radio.checked) {
+          cardInstructions.style.display = "block";
+        } else {
+          cardInstructions.style.display = "none";
+        }
+      });
+    });
+
+    // Trigger initial state (Card is not selected by default)
+    document.querySelector('input[name="paymentMethod"]:checked')?.dispatchEvent(new Event("change"));
+  </script>
+
+
+
+
+
+  <script src="JavaScript/checkout.js"></script>
+</body>
+
+</html>

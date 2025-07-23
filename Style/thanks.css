@@ -1,0 +1,69 @@
+/* Style/thanks.css */
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.thankyou-container {
+  background-color: #fff;
+  padding: 2rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+h1 {
+  color: #333;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin: 1rem 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  background-color: #000;
+  color: #fff;
+  padding: 0.7rem 1.5rem;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #333;
+}
+
+/* Responsive for small screens */
+@media (max-width: 480px) {
+  .thankyou-container {
+    padding: 1.5rem 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+  }
+}

@@ -1,0 +1,213 @@
+/* main.css and info.css combined for enhancement */
+
+/* Reset and base styles */
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 5%;
+}
+
+nav ul li {
+    padding: 12px;
+    margin: 4px;
+    position: relative;
+}
+
+nav ul li a {
+    font-size: 18px;
+    color: #000000;
+}
+
+header nav li::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: #000000;
+    left: calc(50% - 12px);
+    bottom: -4px;
+    transition: .4s ease-in-out;
+}
+
+header nav li:hover::after {
+    width: 25px;
+}
+
+#navbar menu ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+#navbar menu ul li a:hover {
+  color: #e91e63;
+}
+
+/* Section Header */
+.section-header {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+/* Tabs */
+.info-menu {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.info-tab {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.info-tab:hover,
+.info-tab:focus {
+  background-color: #f3f3f3;
+  border-color: #e91e63;
+  outline: none;
+}
+
+/* Tab Content */
+.tab-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.tab-content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #222;
+}
+
+.tab-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 16px;
+}
+
+.tab-content ul {
+  margin: 0 0 16px;
+  padding-left: 18px;
+}
+
+.tab-content ul li {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #444;
+}
+
+.tab-content a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.tab-content a:hover {
+  text-decoration: underline;
+}
+
+.footer {
+  padding-top: 0;
+}
+
+/* Info Layout */
+.info-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 60px 0;
+}
+
+/* Sidebar */
+.info-sidebar {
+  width: 250px;
+  background-color: #f2f2f2;
+  padding: 30px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.info-sidebar h3 {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.info-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-sidebar li {
+  margin-bottom: 14px;
+}
+
+.info-sidebar button {
+  width: 100%;
+  text-align: left;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: transparent;
+  border: none;
+  color: #666;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.info-sidebar button:hover,
+.info-sidebar button.active {
+  background-color: #ddd;
+  color: #000;
+}
+
+/* Content Section */
+.info-content {
+  flex: 1;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .info-layout {
+    flex-direction: column;
+  }
+
+  .info-sidebar {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .info-content {
+    padding: 20px;
+  }
+}
