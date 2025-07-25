@@ -1,7 +1,7 @@
 let productsContainer = [];
 let linkName = document.getElementsByClassName("categories_link");
 
-getData();
+getData("Man");
 
 async function getData(category = null, subCategory = null) {
     let response = await fetch('https://royce-server-production.up.railway.app/api/products');
