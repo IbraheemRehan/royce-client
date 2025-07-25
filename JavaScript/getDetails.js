@@ -17,19 +17,37 @@ async function getData() {
         console.error('Error fetching the data', error);
     }
 }
-function displayDetails(product){
+function displayDetails(product) {
     let productDetails = document.getElementsByClassName('productDetails')[0];
     productDetails.setAttribute("data-id", product.id);
-    document.getElementById("product_image").src = product.images[0];
+
+    // Handle image rotation
+    const imageElement = document.getElementById("product_image");
+    let currentImageIndex = 0;
+
+    if (product.images && product.images.length > 0) {
+        imageElement.src = product.images[0];
+
+        setInterval(() => {
+            currentImageIndex = (currentImageIndex + 1) % product.images.length;
+            imageElement.style.opacity = 0;
+            setTimeout(() => {
+                imageElement.src = product.images[currentImageIndex];
+                imageElement.style.opacity = 1;
+            }, 300); // fade out delay
+        }, 3000); // rotate every 3 seconds
+    }
+
+    // Show product details
     document.querySelector(".category_name").innerHTML = product.category;
     document.querySelector(".product_name").innerHTML = product.name;
     document.querySelector(".product_price").innerHTML = product.price;
     document.querySelector(".product_des").innerHTML = product.description;
 
-    // Populate size dropdown
+    // Populate sizes
     populateSizes(product);
 
-    // Stock status logic
+    // Stock logic
     const stockStatus = document.getElementById("stock_status");
     if (product.stock > 0) {
         stockStatus.textContent = "In Stock";
@@ -43,8 +61,9 @@ function displayDetails(product){
         document.getElementById("btn_add").disabled = true;
     }
 
+    // Add to cart logic
     const linkAdd = document.getElementById("btn_add");
-    linkAdd.addEventListener('click', function(event) {
+    linkAdd.addEventListener('click', function (event) {
         event.preventDefault();
 
         const selectedSize = document.getElementById("size_select").value;
@@ -53,11 +72,10 @@ function displayDetails(product){
             return;
         }
 
-        addToCart(product.id, parseInt(quantity.value) || 1, selectedSize); 
+        addToCart(product.id, parseInt(quantity.value) || 1, selectedSize);
         showToast();
     });
 }
-
 
 
 function showToast() {

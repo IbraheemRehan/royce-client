@@ -197,4 +197,7 @@ input[type=number] {
   background-position: right 15px center;
   background-size: 12px;
 }
+#product_image {
+    transition: opacity 0.5s ease-in-out;
+}
 
