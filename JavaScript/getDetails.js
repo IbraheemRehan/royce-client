@@ -4,7 +4,7 @@ let quantity = document.getElementById("productCount");
 getData()
 async function getData() {
     try {
-        let response = await fetch('http://localhost:5000/api/products');
+        let response = await fetch('https://royce-server-production.up.railway.app//api/products');
         let json = await response.json();
         let product = json.find(item => item.id == productId);
 
