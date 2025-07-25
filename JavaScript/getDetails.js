@@ -198,7 +198,3 @@ function populateSizes(product) {
         sizeSelect.appendChild(option);
     }
 }
-const selectedSize = document.getElementById("size_select").value;
-if (!selectedSize) {
-    alert("Please select a size before adding to cart.");
-}
