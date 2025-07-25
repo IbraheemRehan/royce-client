@@ -2,11 +2,11 @@ const params = new URL(location.href).searchParams;
 const productId = params.get('productId');
 let quantity = document.getElementById("productCount");
 getData()
-async function getData(){
+async function getData() {
     try {
         let response = await fetch('http://localhost:5000/api/products');
         let json = await response.json();
-        let product = json.find(item => item.id == productId); 
+        let product = json.find(item => item.id == productId);
 
         if (product) {
             displayDetails(product);
@@ -26,7 +26,10 @@ function displayDetails(product){
     document.querySelector(".product_price").innerHTML = product.price;
     document.querySelector(".product_des").innerHTML = product.description;
 
-    // ✅ Stock status logic
+    // Populate size dropdown
+    populateSizes(product);
+
+    // Stock status logic
     const stockStatus = document.getElementById("stock_status");
     if (product.stock > 0) {
         stockStatus.textContent = "In Stock";
@@ -43,10 +46,18 @@ function displayDetails(product){
     const linkAdd = document.getElementById("btn_add");
     linkAdd.addEventListener('click', function(event) {
         event.preventDefault();
-        addToCart(product.id, parseInt(quantity.value) || 1); 
+
+        const selectedSize = document.getElementById("size_select").value;
+        if (!selectedSize) {
+            alert("Please select a size before adding to cart.");
+            return;
+        }
+
+        addToCart(product.id, parseInt(quantity.value) || 1, selectedSize); 
         showToast();
     });
 }
+
 
 
 function showToast() {
@@ -55,43 +66,121 @@ function showToast() {
     showCheckAnimation();
     setTimeout(() => {
         toastOverlay.classList.remove("show");
-        showCart();
+
+        // Redirect to cart page instead of just updating UI
+        window.location.href = "cartPage.html";  // <- make sure the filename/path is correct
     }, 1000);
-   
 }
 
-function showCart(){
-    let body = document.querySelector('body');
-    body.classList.add('showCart');
+
+function showCart() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+
+  let validItems = [];
+  let html = "";
+  let subtotal = 0;
+
+  for (let item of cart) {
+    const product = allProducts.find(p => p.id === item.productId);
+    if (!product) continue;
+
+    const itemTotal = Number(product.price) * item.quantity;
+    subtotal += itemTotal;
+    validItems.push(item);
+
+    html += `
+      <div class="cart-item">
+        <img src="${product.images[0]}" alt="${product.name}" />
+        <div>
+          <h3>${product.name}</h3>
+          <p>Size: ${item.size}</p>
+          <p>Qty: ${item.quantity}</p>
+          <p>₹${itemTotal}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  const shipping = subtotal > 0 ? (subtotal <= 3000 ? 300 : 0) : 0;
+  const total = subtotal + shipping;
+
+  const cartItemsContainer = document.querySelector(".cart-items");
+  if (cartItemsContainer) {
+    cartItemsContainer.innerHTML = html;
+  }
+
+  const subtotalElem = document.querySelector(".subtotal");
+  const shippingElem = document.querySelector(".shipping");
+  const totalElem = document.querySelector(".total");
+
+  if (subtotalElem) {
+    subtotalElem.textContent = subtotal > 0 ? `Subtotal: ₹${subtotal}` : "Cart is empty";
+  }
+
+  if (shippingElem) {
+    shippingElem.textContent = subtotal > 0 ? `Shipping: ₹${shipping}` : "";
+  }
+
+  if (totalElem) {
+    totalElem.textContent = subtotal > 0 ? `Total: ₹${total}` : "";
+  }
 }
 
-function showCheckAnimation(){
+
+
+function showCheckAnimation() {
     const checkIconContainer = document.getElementById('checkIcon');
-     checkIconContainer.innerHTML = '';
-     const newCheckIcon = document.createElement('div');
-     newCheckIcon.style.width = '100px';
-     newCheckIcon.style.height = '100px';
-     checkIconContainer.appendChild(newCheckIcon);
- 
-     lottie.loadAnimation({
-         container: newCheckIcon,
-         renderer: 'svg',
-         loop: false,
-         autoplay: true,
-         path: 'json/Animation check.json' 
-     });
+    checkIconContainer.innerHTML = '';
+    const newCheckIcon = document.createElement('div');
+    newCheckIcon.style.width = '100px';
+    newCheckIcon.style.height = '100px';
+    checkIconContainer.appendChild(newCheckIcon);
+
+    lottie.loadAnimation({
+        container: newCheckIcon,
+        renderer: 'svg',
+        loop: false,
+        autoplay: true,
+        path: 'json/Animation check.json'
+    });
 }
-document.getElementById("minus").addEventListener("click", function() {
-    let value = parseInt(quantity.value) || 1; 
+document.getElementById("minus").addEventListener("click", function () {
+    let value = parseInt(quantity.value) || 1;
     if (value > 1) {
-      quantity.value = value - 1;
+        quantity.value = value - 1;
     }
-  });
+});
 
-document.getElementById("plus").addEventListener("click", function() {
-    let value = parseInt(quantity.value) || 1; 
+document.getElementById("plus").addEventListener("click", function () {
+    let value = parseInt(quantity.value) || 1;
     if (value < 999) {
-      quantity.value = value + 1;
+        quantity.value = value + 1;
     }
-  });
+});
 
+// Assuming 'product' is your current product object
+const sizeSelect = document.getElementById("size_select");
+
+function populateSizes(product) {
+    sizeSelect.innerHTML = '<option value="" disabled selected>Select a size</option>'; // Reset
+
+    if (product.sizes && Array.isArray(product.sizes)) {
+        product.sizes.forEach(size => {
+            const option = document.createElement("option");
+            option.value = size;
+            option.textContent = size;
+            sizeSelect.appendChild(option);
+        });
+    } else {
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "No sizes available";
+        option.disabled = true;
+        sizeSelect.appendChild(option);
+    }
+}
+const selectedSize = document.getElementById("size_select").value;
+if (!selectedSize) {
+    alert("Please select a size before adding to cart.");
+}

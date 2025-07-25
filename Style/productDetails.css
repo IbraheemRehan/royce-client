@@ -160,3 +160,41 @@ input[type=number] {
     font-weight: 400;
 }
 
+/* Size Selector Styling */
+.details label[for="size_select"] {
+  display: block;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+
+  color: #333;
+}
+
+#size_select {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  background-color: #fff;
+  appearance: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+#size_select:focus {
+  border-color: #000;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: Dropdown icon styling */
+#size_select {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M35 50l35 40 35-40' stroke='%23333' stroke-width='15' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 12px;
+}
+

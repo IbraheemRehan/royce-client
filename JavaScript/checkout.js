@@ -8,58 +8,64 @@ document.addEventListener("DOMContentLoaded", function () {
   const FREE_DELIVERY_THRESHOLD = 3000;
   const DELIVERY_FEE = 300;
 
-
   const data = JSON.parse(localStorage.getItem("checkoutData"));
   console.log("Checkout data:", data);
 
-if (data) {
-  const { items } = data;
+  if (data) {
+    const { items } = data;
+    let productTotal = 0;
 
-  let productTotal = 0;
+    if (cartItemsContainer && Array.isArray(items)) {
+      cartItemsContainer.innerHTML = items
+        .map((item) => {
+          const price = parseFloat(item.price) || 0;
+          const quantity = parseInt(item.quantity) || 1;
+          const total = price * quantity;
+          productTotal += total;
+          const imageSrc = item.image || (Array.isArray(item.images) ? item.images[0] : "");
 
-  // Render cart items and calculate total
-  if (cartItemsContainer && Array.isArray(items)) {
-    cartItemsContainer.innerHTML = items
-      .map((item) => {
-        const price = parseFloat(item.price) || 0;
-        const quantity = parseInt(item.quantity) || 1;
-        const total = price * quantity;
+          const size = item.size || "N/A";
 
-        productTotal += total;
-
-        const imageSrc = item.image || (item.images?.[0] || "");
-
-        return `
-          <div class="checkout-item">
-            <img src="${imageSrc}" alt="${item.name}" class="checkout-img" />
-            <div class="checkout-info">
-              <p class="checkout-name">${item.name}</p>
-              <p class="checkout-qty">Qty: ${quantity}</p>
-              <p class="checkout-price">Total: PKR ${total.toFixed(2)}</p>
+          return `
+            <div class="checkout-item">
+              <img src="${imageSrc}" alt="${item.name}" class="checkout-img" />
+              <div class="checkout-info">
+                <p class="checkout-name">${item.name}</p>
+                <p class="checkout-size">Size: ${size}</p>
+                <p class="checkout-qty">Qty: ${quantity}</p>
+                <p class="checkout-price">Total: PKR ${total.toFixed(2)}</p>
+              </div>
             </div>
-          </div>
-        `;
-      })
-      .join("");
+          `;
+        })
+        .join("");
 
-    // Determine delivery fee
-    const deliveryFee = productTotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
-    const finalTotal = productTotal + deliveryFee;
+      const deliveryFee = productTotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
+      const discount = data.discount || 0;
+      const finalTotal = productTotal + deliveryFee - discount;
 
-    // Update DOM
-    if (productTotalEl) productTotalEl.textContent = `PKR ${productTotal.toFixed(2)}`;
-    if (deliveryFeeEl) deliveryFeeEl.textContent = `PKR ${deliveryFee}`;
-    if (finalTotalEl) finalTotalEl.textContent = `PKR ${finalTotal.toFixed(2)}`;
-    if (orderTotalEl) orderTotalEl.textContent = `PKR ${finalTotal.toFixed(2)}`;
-    if (checkoutTotalEl) checkoutTotalEl.textContent = `${finalTotal.toFixed(2)}`;
 
-    // Store updated total in localStorage for use during checkout
-    localStorage.setItem(
-      "checkoutData",
-      JSON.stringify({ ...data, totalPrice: finalTotal })
-    );
+      if (productTotalEl) productTotalEl.textContent = `PKR ${productTotal.toFixed(2)}`;
+      if (deliveryFeeEl) deliveryFeeEl.textContent = `PKR ${deliveryFee}`;
+      if (finalTotalEl) finalTotalEl.textContent = `PKR ${finalTotal.toFixed(2)}`;
+      if (orderTotalEl) orderTotalEl.textContent = `PKR ${finalTotal.toFixed(2)}`;
+      if (checkoutTotalEl) checkoutTotalEl.textContent = `${finalTotal.toFixed(2)}`;
+
+
+      //  Show discount on checkout if needed
+      const discountEl = document.getElementById("discountAmount");
+      if (discountEl) {
+        discountEl.textContent = `PKR ${discount.toFixed(2)}`;
+      }
+
+
+      // Store updated values in localStorage
+      localStorage.setItem(
+        "checkoutData",
+        JSON.stringify({ ...data, totalPrice: finalTotal, discount })
+      );
+    }
   }
-}
 });
 
 document.getElementById("checkoutForm").addEventListener("submit", async function (e) {
@@ -71,7 +77,6 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
     return;
   }
 
-  // Get values from form
   const email = document.getElementById("email")?.value;
   const phone = document.getElementById("phone")?.value;
   const firstName = document.getElementById("firstName")?.value;
@@ -113,17 +118,18 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
     return;
   }
 
-  // Prepare order data
-  // Prepare order data
+  // Prepare order payload with size
   const orderPayload = {
     customerName: name,
     email,
     phone,
     paymentMethod,
     totalPrice: Number(data.totalPrice?.toString().replace(/[^0-9.-]+/g, "") || 0),
+    discount: data.discount || 0, //  include discount here
     items: data.items.map(item => ({
-      productId: item.productId || "unknown", // fallback to avoid schema error
+      productId: item.productId || "unknown",
       name: item.name,
+      size: item.size || "N/A",
       quantity: item.quantity,
       price: Number(item.price?.toString().replace(/[^0-9.-]+/g, "") || 0)
     })),
@@ -132,8 +138,6 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
       billing: billingAddress
     }
   };
-
-
 
 
   try {
@@ -153,7 +157,6 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
 
     alert("Order placed successfully! Confirmation sent to your email.");
 
-    // Clear cart
     localStorage.removeItem("cart");
     localStorage.removeItem("checkoutData");
     window.location.href = "index.html";

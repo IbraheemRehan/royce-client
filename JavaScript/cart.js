@@ -6,6 +6,22 @@ let cartItemsCount = document.getElementById("cart_counts");
 const cartTextElements = document.querySelectorAll(".cart_products");
 const btnControl = document.querySelector(".btn_control");
 const cartTotal = document.querySelector(".cart_total");
+let promoDiscount = 0;
+
+function applyPromoCode() {
+    const codeInput = document.getElementById("code").value.trim().toUpperCase();
+
+    if (codeInput === "ROYCE200") {
+        promoDiscount = 200;
+        alert("Promo code applied! Rs. 200 off.");
+    } else {
+        promoDiscount = 0;
+        alert("Invalid promo code.");
+    }
+
+    checkCart(); // refresh totals
+}
+
 
 loadCart();
 getData();
@@ -18,40 +34,69 @@ async function getData() {
 }
 
 function loadCart() {
-    let storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-        cart = JSON.parse(storedCart);
-    }
+    cart = JSON.parse(localStorage.getItem('cart')) || [];
 }
+
 
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-function addToCart(productId, inputQuantity = 1) {
-    let product = products.find(p => p.id == productId);
-    if (product) {
-        let existingProduct = cart.find(p => p.id == productId);
-        if (existingProduct) {
-            existingProduct.quantity += 1;
-        } else {
-            let productWithQuantity = { ...product, quantity: inputQuantity };
-            cart.push(productWithQuantity);
-        }
-        saveCart();
-        checkCart();
+function addToCart(productId, quantity = 1, size = "") {
+    cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existingItem = cart.find(item => item.productId === productId && item.size === size);
+
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        cart.push({
+            productId: productId,
+            quantity: quantity,
+            size: size
+        });
     }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    const checkoutData = {
+        items: cart.map(item => {
+            const product = JSON.parse(localStorage.getItem("allProducts") || "[]")
+                .find(p => p.id === item.productId);
+            return {
+                productId: item.productId,
+                name: product?.name || "Product",
+                image: product?.images?.[0] || "",
+                price: product?.price || 0,
+                quantity: item.quantity,
+                size: item.size
+            };
+        })
+    };
+    localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
+
+    // Force UI update after cart change
+    checkCart();
 }
+
+
 
 function addCartToHTML() {
     let content = ``;
-    cart.forEach((product, index) => {
-        let price = parseFloat(product.price); // assuming price is stored as number/string without Rs.
-        let totalProductPrice = price * product.quantity;
+    let allProducts = JSON.parse(localStorage.getItem("allProducts") || "[]");
+
+    cart.forEach((cartItem, index) => {
+        let product = allProducts.find(p => p.id === cartItem.productId);
+
+        if (!product) return; // skip if not found
+
+        let price = parseFloat(product.price);
+        let totalProductPrice = price * cartItem.quantity;
+
         content += `
         <div class="cart_product">
             <div class="cart_product_img">  
-                <img src=${product.images[0]}>
+                <img src="${product.images[0]}" alt="product">
             </div>
             <div class="cart_product_info">  
                 <div class="top_card">
@@ -67,18 +112,27 @@ function addCartToHTML() {
                     <div class="counts">
                         <button class="counts_btns minus" onclick="decreaseQuantity(${index})">-</button>
                         <input type="number" name="productCount" min="1" max="999"
-                            class="product_count" value=${product.quantity}>
+                            class="product_count" value="${cartItem.quantity}">
                         <button class="counts_btns plus" onclick="increaseQuantity(${index})">+</button>
                     </div>
                     <span class="total_price">Rs. ${totalProductPrice.toFixed(2)}</span>
                 </div>
+                <div class="size_tag">Size: ${cartItem.size || "N/A"}</div>
             </div>
         </div>`;
     });
+
     cartTextElements.forEach(element => {
         element.innerHTML = content;
     });
 }
+async function getData() {
+    let response = await fetch('http://localhost:5000/api/products');
+    let json = await response.json();
+    products = json;
+    localStorage.setItem("allProducts", JSON.stringify(products));
+}
+
 
 function removeFromCart(index) {
     cart.splice(index, 1);
@@ -89,8 +143,9 @@ function removeFromCart(index) {
 function increaseQuantity(index) {
     cart[index].quantity += 1;
     saveCart();
-    checkCart();
+    checkCart(); // Recalculate total
 }
+
 
 function decreaseQuantity(index) {
     if (cart[index].quantity > 1) {
@@ -103,14 +158,21 @@ function decreaseQuantity(index) {
 }
 
 function updateTotalPrice() {
-    let total = cart.reduce((sum, product) => {
+    let allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+
+    let total = cart.reduce((sum, item) => {
+        const product = allProducts.find(p => p.id === item.productId);
+        if (!product) return sum; // skip if not found
+
         let price = parseFloat(product.price);
-        return sum + (price * product.quantity);
+        return sum + (price * item.quantity);
     }, 0);
+
     totalPrice.innerHTML = `Rs. ${total.toFixed(2)}`;
     localStorage.setItem("total price", total + 70);
     return total;
 }
+
 
 function checkCart() {
     if (cart.length === 0) {
@@ -151,33 +213,60 @@ function checkCartPage(total, totalQuantity) {
 
 function displayInCartPage(total) {
     let shippingFee = total <= 3000 ? 300 : 0;
+    let discount = promoDiscount; // Rs. 200 if code applied
+    let finalTotal = total + shippingFee - discount;
+
     document.getElementById("Subtotal").innerHTML = `Rs. ${total.toFixed(2)}`;
-    document.getElementById("total_order").innerHTML = `Rs. ${(total + shippingFee).toFixed(2)}`;
+    document.getElementById("total_order").innerHTML = `Rs. ${finalTotal.toFixed(2)}`;
+    document.getElementById("Discount").innerHTML = `Rs. ${discount.toFixed(2)}`;
+    document.getElementById("Delivery").innerHTML = shippingFee === 0 ? "Free" : `Rs. ${shippingFee.toFixed(2)}`;
+
 }
+
 
 function checkOut() {
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const allProducts = JSON.parse(localStorage.getItem('allProducts')) || [];
 
-    const total = cartItems.reduce((sum, product) => {
-        let price = parseFloat(product.price);
-        return sum + (price * product.quantity);
-    }, 0);
+    const itemsWithDetails = cartItems.map(item => {
+        const product = allProducts.find(p => p.id === item.productId);
+        if (!product) return null; // skip if invalid
 
-    let shippingFee = total <= 3000 ? 300 : 0;
-    const totalOrder = total + shippingFee;
+        return {
+            productId: item.productId,
+            name: product.name,
+            price: Number(product.price),
+            quantity: item.quantity,
+            image: product.images?.[0] || "",
+            size: item.size || "N/A"
+        };
+    }).filter(Boolean); // remove nulls
+
+    const subtotal = itemsWithDetails.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const shipping = subtotal <= 3000 && subtotal > 0 ? 300 : 0;
+    const discount = promoDiscount || 0;
+    const total = subtotal + shipping - discount;
+
 
     const orderInfo = {
-        items: cartItems.map(item => ({
-            productId: item.id,
-            name: item.name,
-            price: Number(item.price),
-            quantity: item.quantity,
-            image: item.images[0]
-        })),
-        totalPrice: Number(totalOrder),
-        shippingFee: Number(shippingFee)
+        items: itemsWithDetails,
+        totalPrice: total,
+        shippingFee: shipping,
+        discount: discount
     };
 
+
     localStorage.setItem('checkoutData', JSON.stringify(orderInfo));
-    window.location.href = 'checkout.html';
+
+    // Navigate only if cart isn't empty
+    localStorage.removeItem('cart');
+    cart = [];
+    checkCart(); // re-render UI immediately
+    if (itemsWithDetails.length > 0) {
+        window.location.href = 'checkout.html';
+    } else {
+        alert("Your cart is empty!");
+    }
 }
+
+document.querySelector(".apply_code button").addEventListener("click", applyPromoCode);
