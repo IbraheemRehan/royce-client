@@ -1,15 +1,14 @@
 
 var currentSlide = 1;
-window.addEventListener("load",function(){
-    // slider not run in small window
-    if (window.innerWidth > 767) {
+
+window.addEventListener("load", function() {
     if (document.querySelectorAll(".slider .slide-content").length > 0) {
         theChecker();
         playSlider();
     }
-    }
     getTrendingProducts();
 });
+
 
 function nextSlider() {
     var btnNext = document.getElementsByClassName("next")[0];
