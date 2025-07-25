@@ -141,7 +141,7 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
 
 
   try {
-    const response = await fetch("https://royce-server-production.up.railway.app//api/orders", {
+    const response = await fetch("https://royce-server-production.up.railway.app/api/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
