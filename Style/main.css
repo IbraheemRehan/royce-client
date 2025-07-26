@@ -114,17 +114,7 @@ nav {
     background-color: white;
 }
 
-.scroll-down {
-    position: static;
-    top: initial;
-    left: initial;
-}
 
-.scroll-up {
-    position: fixed;
-    top: 0;
-    left: 0;
-}
 
 #display_login {
     display: none;
