@@ -591,7 +591,7 @@ body.showCart .cart-section {
 
     .slider {
         width: 100%;
-        height: calc(100vh - 720px);
+        height: calc(100vh - 735px);
         /* margin-top: 150px; */
         position: relative;
         overflow: hidden;
@@ -677,7 +677,7 @@ body.showCart .cart-section {
 
     .slider {
         width: 100%;
-        height: calc(100vh - 720px);
+        height: calc(100vh - 735px);
         /* margin-top: 150px; */
         position: relative;
         overflow: hidden;
@@ -769,7 +769,7 @@ body.showCart .cart-section {
 
     .slider {
         width: 100%;
-        height: calc(100vh - 620px);
+        height: calc(100vh - 635px);
         /* margin-top: 150px; */
         position: relative;
         overflow: hidden;
@@ -1032,7 +1032,7 @@ input[type=number] {
 
     .slider {
         width: 100%;
-        height: calc(100vh - 520px);
+        height: calc(100vh - 535px);
         /* margin-top: 150px; */
         position: relative;
         overflow: hidden;
@@ -1224,7 +1224,7 @@ input[type=number] {
 
     .slider {
         width: 100%;
-        height: calc(100vh - 395px);
+        height: calc(100vh - 400px);
         /* margin-top: 150px; */
         position: relative;
         overflow: hidden;
@@ -1294,7 +1294,7 @@ input[type=number] {
 
     .slider {
         width: 100%;
-        height: calc(100vh - 415px);
+        height: calc(100vh - 425px);
         /* margin-top: 150px; */
         position: relative;
         overflow: hidden;
@@ -1365,7 +1365,7 @@ input[type=number] {
 
     .slider {
         width: 100%;
-        height: calc(100vh - 665px);
+        height: calc(100vh - 670px);
         /* margin-top: 150px; */
         position: relative;
         overflow: hidden;

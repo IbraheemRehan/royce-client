@@ -227,13 +227,14 @@
 
 .collection-card .card-title {
      margin-bottom: 12px;
+     margin-top: auto;
 }
 
 .collection-card .card-text {
   color: #000;
   font-size: 16px;
   font-weight: 600;
-  margin-block-end: auto;
+
 }
 
 .has-before,
