@@ -550,11 +550,11 @@ button[type="submit"]:hover {
   align-items: center;
   border: 1px solid #d3d3d3;
   border-radius: 10px;
-  gap: 140px;
+  gap: 152px;
   padding-right: 10%;
   
   background-color: #fff;
-  padding: 0.5rem 50px;          /* Makes the bar big */
+  padding: 0.5rem 54px;          /* Makes the bar big */
   cursor: pointer;
   transition: border 0.3s ease;
   padding-left: 0; /* Make sure there's no left padding */
