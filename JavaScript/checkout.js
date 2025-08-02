@@ -143,32 +143,30 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
   };
 
 
-  try {
-    const response = await fetch("https://royce-server-production.up.railway.app/api/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(orderPayload),
-      credentials: "include" // ✅ this is important!
-    });
+try {
+  const response = await fetch("https://royce-server-production.up.railway.app/api/orders", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(orderPayload),
+    credentials: "include"
+  });
 
+  const data = await response.json();
 
-    if (!response.ok) {
-      const res = await response.json();
-      alert(res.error || "Failed to place order.");
-      return;
-    }
-
-    alert("Order placed successfully! Confirmation sent to your email.");
-
-    localStorage.removeItem("cart");
-    localStorage.removeItem("checkoutData");
-    window.location.href = "index.html";
-  } catch (error) {
-    console.error("Order error:", error);
-    alert("Something went wrong. Please try again later.");
+  if (!response.ok) {
+    console.error("Order error:", response.status, data); //  error log
+    alert("Order failed: " + data?.error || "Unknown error");
+  } else {
+    console.log("Order success:", data);
+    alert("Order placed successfully!");
   }
+} catch (err) {
+  console.error("Order fetch failed:", err); //  network errors or CORS failures
+  alert("Network error: Could not reach server");
+}
+
 });
 
 function closeCheckout() {
