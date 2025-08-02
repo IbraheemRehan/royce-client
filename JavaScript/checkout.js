@@ -8,6 +8,28 @@ document.addEventListener("DOMContentLoaded", function () {
   const FREE_DELIVERY_THRESHOLD = 3000;
   const DELIVERY_FEE = 300;
 
+  const orderPayload = {
+    customerName: 'John Doe',
+    email: 'john@example.com',
+    items: [
+      {
+        productId: '12345',
+        name: 'White Shirt',
+        quantity: 1,
+        size: 'M',
+        price: 1500
+      }
+    ],
+    totalPrice: 1500,
+    address: {
+      shipping: 'Karachi, Pakistan',
+      billing: 'Karachi, Pakistan'
+    },
+    phone: '03001234567',
+    paymentMethod: 'Cash on Delivery'
+  };
+
+
   console.log("Order Payload Being Sent:", orderPayload);
 
 
@@ -143,29 +165,29 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
   };
 
 
-try {
-  const response = await fetch("https://royce-server-production.up.railway.app/api/orders", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(orderPayload),
-    credentials: "include"
-  });
+  try {
+    const response = await fetch("https://royce-server-production.up.railway.app/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(orderPayload),
+      credentials: "include"
+    });
 
-  const data = await response.json();
+    const data = await response.json();
 
-  if (!response.ok) {
-    console.error("Order error:", response.status, data); //  error log
-    alert("Order failed: " + data?.error || "Unknown error");
-  } else {
-    console.log("Order success:", data);
-    alert("Order placed successfully!");
+    if (!response.ok) {
+      console.error("Order error:", response.status, data); //  error log
+      alert("Order failed: " + data?.error || "Unknown error");
+    } else {
+      console.log("Order success:", data);
+      alert("Order placed successfully!");
+    }
+  } catch (err) {
+    console.error("Order fetch failed:", err); //  network errors or CORS failures
+    alert("Network error: Could not reach server");
   }
-} catch (err) {
-  console.error("Order fetch failed:", err); //  network errors or CORS failures
-  alert("Network error: Could not reach server");
-}
 
 });
 
