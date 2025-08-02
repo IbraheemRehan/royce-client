@@ -8,31 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const FREE_DELIVERY_THRESHOLD = 3000;
   const DELIVERY_FEE = 300;
 
-  const orderPayload = {
-    customerName: 'John Doe',
-    email: 'john@example.com',
-    items: [
-      {
-        productId: '12345',
-        name: 'White Shirt',
-        quantity: 1,
-        size: 'M',
-        price: 1500
-      }
-    ],
-    totalPrice: 1500,
-    address: {
-      shipping: 'Karachi, Pakistan',
-      billing: 'Karachi, Pakistan'
-    },
-    phone: '03001234567',
-    paymentMethod: 'Cash on Delivery'
-  };
-
-
-  console.log("Order Payload Being Sent:", orderPayload);
-
-
   const data = JSON.parse(localStorage.getItem("checkoutData"));
   console.log("Checkout data:", data);
 
@@ -163,7 +138,7 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
       billing: billingAddress
     }
   };
-
+  console.log(orderPayload);
 
   try {
     const response = await fetch("https://royce-server-production.up.railway.app/api/orders", {
