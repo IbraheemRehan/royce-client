@@ -169,3 +169,5 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
 function closeCheckout() {
   window.location.href = "index.html";
 }
+
+console.log("🧠 localStorage.cart:", localStorage.getItem("cart"));
