@@ -170,7 +170,6 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
 
   } catch (err) {
     console.error("Order fetch failed:", err.message, err);
-    alert("Network error: " + err.message);
   }
 
 
