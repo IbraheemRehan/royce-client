@@ -158,6 +158,8 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
     } else {
       console.log("Order success:", data);
       alert("Order placed successfully!");
+      localStorage.removeItem('cart');
+      localStorage.removeItem('checkoutData');
     }
   } catch (err) {
     console.error("Order fetch failed:", err.message, err);
