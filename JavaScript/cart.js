@@ -230,7 +230,7 @@ function checkOut() {
 
     const itemsWithDetails = cartItems.map(item => {
         const product = allProducts.find(p => p.id === item.productId);
-        if (!product) return null; // skip if invalid
+        if (!product) return null;
 
         return {
             productId: item.productId,
@@ -240,13 +240,12 @@ function checkOut() {
             image: product.images?.[0] || "",
             size: item.size || "N/A"
         };
-    }).filter(Boolean); // remove nulls
+    }).filter(Boolean);
 
     const subtotal = itemsWithDetails.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const shipping = subtotal <= 3000 && subtotal > 0 ? 300 : 0;
     const discount = promoDiscount || 0;
     const total = subtotal + shipping - discount;
-
 
     const orderInfo = {
         items: itemsWithDetails,
@@ -255,11 +254,15 @@ function checkOut() {
         discount: discount
     };
 
-
     localStorage.setItem('checkoutData', JSON.stringify(orderInfo));
 
-   
+    if (itemsWithDetails.length > 0) {
+        window.location.href = 'checkout.html';
+    } else {
+        alert("Your cart is empty!");
+    }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const applyBtn = document.querySelector(".apply_code button");
