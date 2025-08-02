@@ -147,7 +147,6 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
         "Content-Type": "application/json"
       },
       body: JSON.stringify(orderPayload),
-      credentials: "include",
       mode: "cors"
     });
 

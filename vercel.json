@@ -1,12 +1,10 @@
 {
-  "headers": [
+  "redirects": [
     {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" }
-      ]
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.roycethreads.com" }],
+      "destination": "https://roycethreads.com",
+      "permanent": true
     }
   ]
 }
