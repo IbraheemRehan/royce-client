@@ -4,7 +4,7 @@ let linkName = document.getElementsByClassName("categories_link");
 getData("Man");
 
 async function getData(category = null, subCategory = null) {
-    let response = await fetch('https://royce-server-production.up.railway.app/api/products');
+    let response = await fetch('/api/products');
     let json = await response.json();
     productsContainer = json;
 

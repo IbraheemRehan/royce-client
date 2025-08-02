@@ -67,7 +67,7 @@ function playSlider() {
 }
 
 async function getTrendingProducts() {
-    let response = await fetch('https://royce-server-production.up.railway.app/api/products');
+    let response = await fetch('/api/products');
     let products = await response.json();
     let trendingProducts = products.filter(product => product.isTrending);
     displayTrendingProducts(trendingProducts);
@@ -114,7 +114,7 @@ function displayDetails(productId){
 
 
 async function getTrendingProducts() {
-    let response = await fetch('https://royce-server-production.up.railway.app/api/products');
+    let response = await fetch('/api/products');
     let products = await response.json();
     
     // Separate trending products for Men and Women

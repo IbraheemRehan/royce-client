@@ -141,7 +141,7 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
   console.log(orderPayload);
 
   try {
-    const response = await fetch("https://royce-server-production.up.railway.app/api/orders", {
+    const response = await fetch("/api/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -158,8 +158,9 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
     } else {
       console.log("Order success:", data);
       alert("Order placed successfully!");
-      localStorage.removeItem('cart');
-      localStorage.removeItem('checkoutData');
+      // 🧹 Clear cart data from localStorage
+      localStorage.removeItem("cart");
+      localStorage.removeItem("checkoutData");
     }
   } catch (err) {
     console.error("Order fetch failed:", err.message, err);
@@ -174,3 +175,4 @@ function closeCheckout() {
 }
 
 console.log("🧠 localStorage.cart:", localStorage.getItem("cart"));
+localStorage.removeItem('cart');
