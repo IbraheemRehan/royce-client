@@ -269,4 +269,9 @@ function checkOut() {
     }
 }
 
-document.querySelector(".apply_code button").addEventListener("click", applyPromoCode);
+document.addEventListener("DOMContentLoaded", () => {
+  const applyBtn = document.querySelector(".apply_code button");
+  if (applyBtn) {
+    applyBtn.addEventListener("click", applyPromoCode);
+  }
+});
