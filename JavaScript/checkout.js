@@ -150,18 +150,24 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
       mode: "cors"
     });
 
-    const data = await response.json();
+    // Safely parse response
+    let data;
+    try {
+      data = await response.json();
+    } catch (jsonErr) {
+      data = null; // Handle empty JSON
+    }
 
     if (!response.ok) {
-      console.error("Order error:", response.status, data); //  error log
-      alert("Order failed: " + data?.error || "Unknown error");
+      console.error("Order error:", response.status, data);
+      alert("Order failed: " + (data?.error || "Unknown error"));
     } else {
       console.log("Order success:", data);
       alert("Order placed successfully!");
-      // 🧹 Clear cart data from localStorage
       localStorage.removeItem("cart");
       localStorage.removeItem("checkoutData");
     }
+
   } catch (err) {
     console.error("Order fetch failed:", err.message, err);
     alert("Network error: " + err.message);
