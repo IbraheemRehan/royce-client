@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const FREE_DELIVERY_THRESHOLD = 3000;
   const DELIVERY_FEE = 300;
 
+  console.log("Order Payload Being Sent:", orderPayload);
+
+
   const data = JSON.parse(localStorage.getItem("checkoutData"));
   console.log("Checkout data:", data);
 
@@ -146,8 +149,10 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(orderPayload)
+      body: JSON.stringify(orderPayload),
+      credentials: "include" // ✅ this is important!
     });
+
 
     if (!response.ok) {
       const res = await response.json();
