@@ -160,9 +160,10 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
       alert("Order placed successfully!");
     }
   } catch (err) {
-    console.error("Order fetch failed:", err); //  network errors or CORS failures
-    alert("Network error: Could not reach server");
+    console.error("Order fetch failed:", err.message, err);
+    alert("Network error: " + err.message);
   }
+
 
 });
 

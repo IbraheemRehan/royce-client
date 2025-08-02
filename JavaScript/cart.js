@@ -258,15 +258,7 @@ function checkOut() {
 
     localStorage.setItem('checkoutData', JSON.stringify(orderInfo));
 
-    // Navigate only if cart isn't empty
-    localStorage.removeItem('cart');
-    cart = [];
-    checkCart(); // re-render UI immediately
-    if (itemsWithDetails.length > 0) {
-        window.location.href = 'checkout.html';
-    } else {
-        alert("Your cart is empty!");
-    }
+   
 }
 
 document.addEventListener("DOMContentLoaded", () => {
