@@ -212,36 +212,40 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-   sizeChartBtn.addEventListener("click", () => {
-    document.querySelectorAll(".chart-section").forEach(sec => sec.classList.add("hidden"));
+    sizeChartBtn.addEventListener("click", () => {
+        document.querySelectorAll(".chart-section").forEach(sec => sec.classList.add("hidden"));
 
-    if (!currentProduct) {
-        console.error("No product loaded for size chart.");
-        return;
-    }
+        if (!currentProduct) {
+            console.error("No product loaded for size chart.");
+            return;
+        }
 
-    const gender = currentProduct.category?.toLowerCase();       // "man" / "woman"
-    const subcategory = currentProduct.subcategory?.toLowerCase(); // "baggy t-shirts", "pants", etc.
+        const gender = currentProduct.category?.trim().toLowerCase();
+        const subcategory = currentProduct.subcategory?.trim().toLowerCase();
 
-    if (gender.includes("Man")) {
-        if (subcategory.includes("Baggy T-Shirts") || subcategory.includes("t-shirt")) {
-            document.querySelector(".men-shirt")?.classList.remove("hidden");
-        }
-        if (subcategory.includes("Baggy Jeans")) {
-            document.querySelector(".men-pants")?.classList.remove("hidden");
-        }
-    } 
-    else if (gender.includes("Woman")) {
-        if (subcategory.includes("Baggy T-Shirts") || subcategory.includes("t-shirt")) {
-            document.querySelector(".women-shirt")?.classList.remove("hidden");
-        }
-        if (subcategory.includes("Baggy Jeans")) {
-            document.querySelector(".women-pants")?.classList.remove("hidden");
-        }
-    }
+        // Detect clothing type
+        const isShirt = /\bshirt\b/.test(subcategory) || /\bt-shirt\b/.test(subcategory);
+        const isPants = /\bpants?\b/.test(subcategory);
 
-    sizeChartModal.style.display = "block";
-});
+        let matched = false;
+
+        if (["man", "men"].includes(gender)) {
+            if (isShirt) { document.querySelector(".men-shirt")?.classList.remove("hidden"); matched = true; }
+            if (isPants) { document.querySelector(".men-pants")?.classList.remove("hidden"); matched = true; }
+        }
+        else if (["woman", "women"].includes(gender)) {
+            if (isShirt) { document.querySelector(".women-shirt")?.classList.remove("hidden"); matched = true; }
+            if (isPants) { document.querySelector(".women-pants")?.classList.remove("hidden"); matched = true; }
+        }
+
+        // Fallback to a generic chart if no match found
+        if (!matched) {
+            document.querySelector(".generic-size-chart")?.classList.remove("hidden");
+        }
+
+        sizeChartModal.style.display = "block";
+    });
+
 
     window.addEventListener("click", (event) => {
         if (event.target === sizeChartModal) {
