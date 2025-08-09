@@ -223,19 +223,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const gender = currentProduct.category?.toLowerCase();       // "man" / "woman"
     const subcategory = currentProduct.subcategory?.toLowerCase(); // "baggy t-shirts", "pants", etc.
 
-    if (gender.includes("man")) {
-        if (subcategory.includes("shirt") || subcategory.includes("t-shirt")) {
+    if (gender.includes("Man")) {
+        if (subcategory.includes("Baggy T-Shirts") || subcategory.includes("t-shirt")) {
             document.querySelector(".men-shirt")?.classList.remove("hidden");
         }
-        if (subcategory.includes("pants")) {
+        if (subcategory.includes("Baggy Jeans")) {
             document.querySelector(".men-pants")?.classList.remove("hidden");
         }
     } 
-    else if (gender.includes("woman")) {
-        if (subcategory.includes("shirt") || subcategory.includes("t-shirt")) {
+    else if (gender.includes("Woman")) {
+        if (subcategory.includes("Baggy T-Shirts") || subcategory.includes("t-shirt")) {
             document.querySelector(".women-shirt")?.classList.remove("hidden");
         }
-        if (subcategory.includes("pants")) {
+        if (subcategory.includes("Baggy Jeans")) {
             document.querySelector(".women-pants")?.classList.remove("hidden");
         }
     }
