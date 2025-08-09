@@ -213,8 +213,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // Close modal on × click
-    closeChartBtn.addEventListener("click", () => {
+    // Close modal
+    closeChart.addEventListener("click", () => {
         sizeChartModal.style.display = "none";
     });
 
@@ -225,3 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+document.querySelector('.close-chart').addEventListener('click', function () {
+    document.getElementById('sizeChartModal').style.display = 'none';
+});
+
