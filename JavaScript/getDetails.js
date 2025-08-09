@@ -202,47 +202,45 @@ function populateSizes(product) {
     }
 }
 // Size chart modal logic
-const sizeChartBtn = document.getElementById("size_chart_btn");
-const sizeChartModal = document.getElementById("sizeChartModal");
-const closeChart = document.querySelector(".close-chart");
+document.addEventListener("DOMContentLoaded", () => {
+    const sizeChartBtn = document.getElementById("size_chart_btn");
+    const sizeChartModal = document.getElementById("sizeChartModal");
+    const closeChart = document.querySelector(".close-chart");
 
-sizeChartBtn.addEventListener("click", () => {
-    document.querySelectorAll(".chart-section").forEach(sec => sec.classList.add("hidden"));
-
-    if (!currentProduct) {
-        console.error("No product loaded for size chart.");
+    if (!sizeChartBtn || !sizeChartModal || !closeChart) {
+        console.error("Size chart modal elements missing in DOM.");
         return;
     }
 
-    const gender = currentProduct.gender;
-    const category = currentProduct.category.toLowerCase();
+    sizeChartBtn.addEventListener("click", () => {
+        document.querySelectorAll(".chart-section").forEach(sec => sec.classList.add("hidden"));
 
-    if (gender === "Men") {
-        if (category.includes("shirt")) {
-            document.querySelector(".men-shirt").classList.remove("hidden");
+        if (!currentProduct) {
+            console.error("No product loaded for size chart.");
+            return;
         }
-        if (category.includes("pants")) {
-            document.querySelector(".men-pants").classList.remove("hidden");
-        }
-    } 
-    else if (gender === "Women") {
-        if (category.includes("shirt")) {
-            document.querySelector(".women-shirt").classList.remove("hidden");
-        }
-        if (category.includes("pants")) {
-            document.querySelector(".women-pants").classList.remove("hidden");
-        }
-    }
 
-    sizeChartModal.style.display = "block";
-});
+        const gender = currentProduct.gender;
+        const category = currentProduct.category.toLowerCase();
 
-closeChart.addEventListener("click", () => {
-    sizeChartModal.style.display = "none";
-});
+        if (gender === "Men") {
+            if (category.includes("shirt")) document.querySelector(".men-shirt")?.classList.remove("hidden");
+            if (category.includes("pants")) document.querySelector(".men-pants")?.classList.remove("hidden");
+        } else if (gender === "Women") {
+            if (category.includes("shirt")) document.querySelector(".women-shirt")?.classList.remove("hidden");
+            if (category.includes("pants")) document.querySelector(".women-pants")?.classList.remove("hidden");
+        }
 
-window.addEventListener("click", (event) => {
-    if (event.target === sizeChartModal) {
+        sizeChartModal.style.display = "block";
+    });
+
+    closeChart.addEventListener("click", () => {
         sizeChartModal.style.display = "none";
-    }
+    });
+
+    window.addEventListener("click", (event) => {
+        if (event.target === sizeChartModal) {
+            sizeChartModal.style.display = "none";
+        }
+    });
 });
