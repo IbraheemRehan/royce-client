@@ -202,21 +202,31 @@ input[type=number] {
 }
 
 /* Size Chart Button */
+/* Size Chart Button (Match Add to Cart Styling) */
 .size-chart-btn {
-    background: none;
-    color: #007bff;
-    border: none;
-    cursor: pointer;
-    margin-top: 6px;
-    padding: 0;
-    text-decoration: underline;
+    background-color: #000; /* Same black background */
+    color: #fff; /* White text */
     font-size: 14px;
-    font-weight: 500;
-    transition: color 0.2s ease;
+    font-weight: 400;
+    min-height: 55px;
+    min-width: 55px;
+    width: 70%;
+    text-transform: uppercase;
+    border: none;
+    padding: 5px 25px;
+    margin-bottom: 10px;
+    margin-top: 4px;
+    cursor: pointer;
+    border-radius: 0; /* Same as add to cart button */
+    transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 .size-chart-btn:hover {
-    color: #0056b3;
+    background-color: #333; /* Slightly lighter on hover */
+}
+
+.size-chart-btn:active {
+    transform: scale(0.98); /* Slight click feedback */
 }
 
 /* Modal Styles */

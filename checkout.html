@@ -257,49 +257,72 @@
   <!-- Scripts -->
 
   <script>
-    // Toggle billing address section
-    const billingRadios = document.querySelectorAll('input[name="billingAddress"]');
-    const billingFields = document.getElementById("billingAddressFields");
+  // Toggle billing address section
+  const billingRadios = document.querySelectorAll('input[name="billingAddress"]');
+  const billingFields = document.getElementById("billingAddressFields");
+  const errorBox = document.getElementById("errorBox");
+  const errorMessage = document.getElementById("errorMessage");
 
-    document.getElementById("checkoutForm").addEventListener("submit", function (e) {
-      e.preventDefault(); // prevent actual form submission
+  function showError(msg) {
+    errorMessage.textContent = msg;
+    errorBox.style.display = "block";
+  }
 
-      // You may add validation, backend API submission, etc. here
+  function hideError() {
+    errorBox.style.display = "none";
+  }
 
-      // Simulate success — redirect to thank you page
-      window.location.href = "thanks.html";
+  document.getElementById("checkoutForm").addEventListener("submit", function (e) {
+    e.preventDefault(); // prevent actual form submission
+
+    // Province validation
+    const province = document.getElementById("province").value;
+    if (province === "") {
+      showError("Please select your province before proceeding.");
+      return;
+    }
+
+    // If billing address is different, also check billing province
+    if (document.querySelector('input[name="billingAddress"]:checked').value === "different") {
+      const billingProvince = document.getElementById("billingProvince").value;
+      if (billingProvince === "") {
+        showError("Please select your billing province.");
+        return;
+      }
+    }
+
+    // Simulate success — redirect to thank you page
+    window.location.href = "thanks.html";
+  });
+
+  billingRadios.forEach(radio => {
+    radio.addEventListener("change", () => {
+      if (radio.value === "different" && radio.checked) {
+        billingFields.style.display = "block";
+      } else if (radio.value === "same" && radio.checked) {
+        billingFields.style.display = "none";
+      }
     });
+  });
 
+  // Toggle card payment instructions
+  const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+  const cardInstructions = document.getElementById("cardInstructions");
 
-    billingRadios.forEach(radio => {
-      radio.addEventListener("change", () => {
-        if (radio.value === "different" && radio.checked) {
-          billingFields.style.display = "block";
-        } else if (radio.value === "same" && radio.checked) {
-          billingFields.style.display = "none";
-        }
-      });
+  paymentRadios.forEach(radio => {
+    radio.addEventListener("change", () => {
+      if (radio.value === "Card" && radio.checked) {
+        cardInstructions.style.display = "block";
+      } else {
+        cardInstructions.style.display = "none";
+      }
     });
+  });
 
+  // Trigger initial state (Card is not selected by default)
+  document.querySelector('input[name="paymentMethod"]:checked')?.dispatchEvent(new Event("change"));
+</script>
 
-
-    // Toggle card payment instructions
-    const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
-    const cardInstructions = document.getElementById("cardInstructions");
-
-    paymentRadios.forEach(radio => {
-      radio.addEventListener("change", () => {
-        if (radio.value === "Card" && radio.checked) {
-          cardInstructions.style.display = "block";
-        } else {
-          cardInstructions.style.display = "none";
-        }
-      });
-    });
-
-    // Trigger initial state (Card is not selected by default)
-    document.querySelector('input[name="paymentMethod"]:checked')?.dispatchEvent(new Event("change"));
-  </script>
   <!-- Error Message Box -->
   <div id="errorBox" class="error-box" style="display:none;">
     <p id="errorMessage"></p>
