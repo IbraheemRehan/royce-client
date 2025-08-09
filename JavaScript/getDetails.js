@@ -212,32 +212,36 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    sizeChartBtn.addEventListener("click", () => {
-        document.querySelectorAll(".chart-section").forEach(sec => sec.classList.add("hidden"));
+   sizeChartBtn.addEventListener("click", () => {
+    document.querySelectorAll(".chart-section").forEach(sec => sec.classList.add("hidden"));
 
-        if (!currentProduct) {
-            console.error("No product loaded for size chart.");
-            return;
+    if (!currentProduct) {
+        console.error("No product loaded for size chart.");
+        return;
+    }
+
+    const gender = currentProduct.category?.toLowerCase();       // "man" / "woman"
+    const subcategory = currentProduct.subcategory?.toLowerCase(); // "baggy t-shirts", "pants", etc.
+
+    if (gender.includes("man")) {
+        if (subcategory.includes("shirt") || subcategory.includes("t-shirt")) {
+            document.querySelector(".men-shirt")?.classList.remove("hidden");
         }
-
-        const gender = currentProduct.gender?.toLowerCase();
-        const category = currentProduct.category?.toLowerCase();
-
-        if (gender === "men") {
-            if (category.includes("shirt")) document.querySelector(".men-shirt")?.classList.remove("hidden");
-            if (category.includes("pants")) document.querySelector(".men-pants")?.classList.remove("hidden");
-        } else if (gender === "women") {
-            if (category.includes("shirt")) document.querySelector(".women-shirt")?.classList.remove("hidden");
-            if (category.includes("pants")) document.querySelector(".women-pants")?.classList.remove("hidden");
+        if (subcategory.includes("pants")) {
+            document.querySelector(".men-pants")?.classList.remove("hidden");
         }
+    } 
+    else if (gender.includes("woman")) {
+        if (subcategory.includes("shirt") || subcategory.includes("t-shirt")) {
+            document.querySelector(".women-shirt")?.classList.remove("hidden");
+        }
+        if (subcategory.includes("pants")) {
+            document.querySelector(".women-pants")?.classList.remove("hidden");
+        }
+    }
 
-
-        sizeChartModal.style.display = "block";
-    });
-
-    closeChart.addEventListener("click", () => {
-        sizeChartModal.style.display = "none";
-    });
+    sizeChartModal.style.display = "block";
+});
 
     window.addEventListener("click", (event) => {
         if (event.target === sizeChartModal) {
