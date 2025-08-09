@@ -113,10 +113,49 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
     }
   }
 
-  if (!email || !phone || !firstName || !lastName || !address || !city || !province || !paymentMethod) {
+  // Instead of this:
+// if (!email || !phone || !firstName || !lastName || !address || !city || !province || !paymentMethod) {
+//   showError("Please fill all required fields.");
+//   return;
+// }
+
+// Use this:
+const requiredFields = [
+  document.getElementById("email"),
+  document.getElementById("phone"),
+  document.getElementById("firstName"),
+  document.getElementById("lastName"),
+  document.getElementById("address"),
+  document.getElementById("city"),
+  document.getElementById("province") // Province dropdown
+];
+
+// If billing is different, also check these:
+if (billingChoice === "different") {
+  requiredFields.push(
+    document.getElementById("billingAddress"),
+    document.getElementById("billingCity"),
+    document.getElementById("billingProvince")
+  );
+}
+
+// Check for empty or unselected fields
+for (let field of requiredFields) {
+  if (!field || !field.value.trim()) {
     showError("Please fill all required fields.");
+    field.scrollIntoView({ behavior: "smooth", block: "center" });
+    field.focus();
     return;
   }
+}
+
+// Also check payment method
+if (!paymentRadio) {
+  showError("Please select a payment method.");
+  paymentRadio?.scrollIntoView({ behavior: "smooth", block: "center" });
+  return;
+}
+
 
   // Prepare order payload with size
   const orderPayload = {
@@ -188,6 +227,8 @@ function showError(message) {
 function hideError() {
   document.getElementById("errorBox").style.display = "none";
 }
+
+
 
 
 console.log("🧠 localStorage.cart:", localStorage.getItem("cart"));
