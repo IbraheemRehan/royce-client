@@ -220,6 +220,16 @@ input[type=number] {
 }
 
 /* Modal Styles */
+.chart-section {
+    display: none; /* Hide by default */
+}
+.chart-section:not(.hidden) {
+    display: block; /* Show when not hidden */
+}
+.hidden {
+    display: none !important;
+}
+
 .size-chart-modal {
     display: none;
     position: fixed;
