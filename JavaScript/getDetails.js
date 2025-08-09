@@ -20,7 +20,7 @@ async function getData() {
     }
 }
 function displayDetails(product) {
-     currentProduct = product;
+    currentProduct = product;
     let productDetails = document.getElementsByClassName('productDetails')[0];
     productDetails.setAttribute("data-id", product.id);
 
@@ -95,22 +95,22 @@ function showToast() {
 
 
 function showCart() {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const allProducts = JSON.parse(localStorage.getItem("allProducts")) || [];
 
-  let validItems = [];
-  let html = "";
-  let subtotal = 0;
+    let validItems = [];
+    let html = "";
+    let subtotal = 0;
 
-  for (let item of cart) {
-    const product = allProducts.find(p => p.id === item.productId);
-    if (!product) continue;
+    for (let item of cart) {
+        const product = allProducts.find(p => p.id === item.productId);
+        if (!product) continue;
 
-    const itemTotal = Number(product.price) * item.quantity;
-    subtotal += itemTotal;
-    validItems.push(item);
+        const itemTotal = Number(product.price) * item.quantity;
+        subtotal += itemTotal;
+        validItems.push(item);
 
-    html += `
+        html += `
       <div class="cart-item">
         <img src="${product.images[0]}" alt="${product.name}" />
         <div>
@@ -121,31 +121,31 @@ function showCart() {
         </div>
       </div>
     `;
-  }
+    }
 
-  const shipping = subtotal > 0 ? (subtotal <= 3000 ? 300 : 0) : 0;
-  const total = subtotal + shipping;
+    const shipping = subtotal > 0 ? (subtotal <= 3000 ? 300 : 0) : 0;
+    const total = subtotal + shipping;
 
-  const cartItemsContainer = document.querySelector(".cart-items");
-  if (cartItemsContainer) {
-    cartItemsContainer.innerHTML = html;
-  }
+    const cartItemsContainer = document.querySelector(".cart-items");
+    if (cartItemsContainer) {
+        cartItemsContainer.innerHTML = html;
+    }
 
-  const subtotalElem = document.querySelector(".subtotal");
-  const shippingElem = document.querySelector(".shipping");
-  const totalElem = document.querySelector(".total");
+    const subtotalElem = document.querySelector(".subtotal");
+    const shippingElem = document.querySelector(".shipping");
+    const totalElem = document.querySelector(".total");
 
-  if (subtotalElem) {
-    subtotalElem.textContent = subtotal > 0 ? `Subtotal: ₹${subtotal}` : "Cart is empty";
-  }
+    if (subtotalElem) {
+        subtotalElem.textContent = subtotal > 0 ? `Subtotal: ₹${subtotal}` : "Cart is empty";
+    }
 
-  if (shippingElem) {
-    shippingElem.textContent = subtotal > 0 ? `Shipping: ₹${shipping}` : "";
-  }
+    if (shippingElem) {
+        shippingElem.textContent = subtotal > 0 ? `Shipping: ₹${shipping}` : "";
+    }
 
-  if (totalElem) {
-    totalElem.textContent = subtotal > 0 ? `Total: ₹${total}` : "";
-  }
+    if (totalElem) {
+        totalElem.textContent = subtotal > 0 ? `Total: ₹${total}` : "";
+    }
 }
 
 
@@ -220,16 +220,17 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const gender = currentProduct.gender;
-        const category = currentProduct.category.toLowerCase();
+        const gender = currentProduct.gender?.toLowerCase();
+        const category = currentProduct.category?.toLowerCase();
 
-        if (gender === "Men") {
+        if (gender === "men") {
             if (category.includes("shirt")) document.querySelector(".men-shirt")?.classList.remove("hidden");
             if (category.includes("pants")) document.querySelector(".men-pants")?.classList.remove("hidden");
-        } else if (gender === "Women") {
+        } else if (gender === "women") {
             if (category.includes("shirt")) document.querySelector(".women-shirt")?.classList.remove("hidden");
             if (category.includes("pants")) document.querySelector(".women-pants")?.classList.remove("hidden");
         }
+
 
         sizeChartModal.style.display = "block";
     });
