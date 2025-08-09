@@ -149,6 +149,15 @@ for (let field of requiredFields) {
   }
 }
 
+for (let field of requiredFields) {
+  if (!field || !field.value.trim()) {
+    showError("Please fill all required fields.");
+    scrollToField(field);
+    return;
+  }
+}
+
+
 // Also check payment method
 if (!paymentRadio) {
   showError("Please select a payment method.");
@@ -228,6 +237,21 @@ function hideError() {
   document.getElementById("errorBox").style.display = "none";
 }
 
+function scrollToField(field) {
+  if (!field) return;
+
+  field.blur(); // Close keyboard
+  setTimeout(() => {
+    const yOffset = -100; // Adjust so field isn't at the very top
+    const y = field.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({ top: y, behavior: "smooth" });
+
+    // Delay the focus so scrolling finishes first
+    setTimeout(() => {
+      field.focus({ preventScroll: true });
+    }, 300);
+  }, 200);
+}
 
 
 
