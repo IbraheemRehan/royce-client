@@ -114,7 +114,7 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
   }
 
   if (!email || !phone || !firstName || !lastName || !address || !city || !province || !paymentMethod) {
-    alert("Please fill all required fields.");
+    showError("Please fill all required fields.");
     return;
   }
 
@@ -178,6 +178,17 @@ document.getElementById("checkoutForm").addEventListener("submit", async functio
 function closeCheckout() {
   window.location.href = "index.html";
 }
+function showError(message) {
+  const errorBox = document.getElementById("errorBox");
+  const errorMessage = document.getElementById("errorMessage");
+  errorMessage.textContent = message;
+  errorBox.style.display = "block";
+}
+
+function hideError() {
+  document.getElementById("errorBox").style.display = "none";
+}
+
 
 console.log("🧠 localStorage.cart:", localStorage.getItem("cart"));
 localStorage.removeItem('cart');

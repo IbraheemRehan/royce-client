@@ -201,3 +201,105 @@ input[type=number] {
     transition: opacity 0.5s ease-in-out;
 }
 
+/* Size Chart Button */
+.size-chart-btn {
+    background: none;
+    color: #007bff;
+    border: none;
+    cursor: pointer;
+    margin-top: 6px;
+    padding: 0;
+    text-decoration: underline;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.size-chart-btn:hover {
+    color: #0056b3;
+}
+
+/* Modal Styles */
+.size-chart-modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    inset: 0; /* shorthand for top, right, bottom, left */
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 50px 15px;
+    overflow-y: auto;
+    animation: fadeInBackdrop 0.3s ease-in-out;
+}
+
+/* Modal Inner Content */
+.size-chart-content {
+    background: #fff;
+    margin: auto;
+    padding: 20px 25px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 600px;
+    animation: fadeInContent 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Close Button */
+.close-chart {
+    float: right;
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s ease;
+}
+
+.close-chart:hover {
+    color: #333;
+}
+
+/* Chart Sections */
+.chart-section {
+    margin-bottom: 25px;
+}
+
+.chart-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.size-chart-content img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+/* Animations */
+@keyframes fadeInBackdrop {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInContent {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+    .size-chart-content {
+        padding: 15px 18px;
+    }
+
+    .chart-section h3 {
+        font-size: 16px;
+    }
+}
+.chart-section {
+    margin-bottom: 20px;
+}
+
+.chart-section.hidden {
+    display: none;
+}

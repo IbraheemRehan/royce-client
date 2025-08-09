@@ -93,6 +93,8 @@
                         <!-- Sizes will be populated via JS -->
                     </select>
 
+                    <button type="button" id="size_chart_btn" class="size-chart-btn">View Size Chart</button>
+
                     <div class="buttons">
                         <div class="counts">
                             <button id="minus" class="counts_btns">-</button>
@@ -173,6 +175,40 @@
     <script src="JavaScript/main.js"></script>
     <script src="JavaScript/getDetails.js"></script>
     <script src="JavaScript/cart.js"></script>
+
+    <!-- Size Chart Modal -->
+    <div id="sizeChartModal" class="size-chart-modal">
+        <div class="size-chart-content">
+            <span class="close-chart">&times;</span>
+            <h2>Size Chart</h2>
+
+            <div class="size-charts">
+                <!-- Men Charts -->
+                <div class="chart-section men-shirt">
+                    <h3>Men's Shirt Size Chart</h3>
+                    <img src="https://res.cloudinary.com/dysfwxbhk/image/upload/v1754763820/Oversized_Tshirts_Size_Guide_bkayn5.jpg" alt="Men's Shirt Size Chart">
+                </div>
+
+                <div class="chart-section men-pants">
+                    <h3>Men's Pants Size Chart</h3>
+                    <img src="https://res.cloudinary.com/dysfwxbhk/image/upload/v1754764455/Screenshot_2025-08-09_113227_ce67gn.png" alt="Men's Pants Size Chart">
+                </div>
+
+                <!-- Women Charts -->
+                <div class="chart-section women-shirt">
+                    <h3>Women's Shirt Size Chart</h3>
+                    <img src="images/womens-shirt-size-chart.png" alt="Women's Shirt Size Chart">
+                </div>
+
+                <div class="chart-section women-pants">
+                    <h3>Women's Pants Size Chart</h3>
+                    <img src="images/womens-pants-size-chart.png" alt="Women's Pants Size Chart">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </body>
 
 </html>

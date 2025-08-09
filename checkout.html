@@ -239,7 +239,7 @@
       <div class="checkout-summary-box">
         <p>Product Total: <strong id="productTotal">PKR 0</strong></p>
         <p>Delivery Fee: <strong id="deliveryFee">PKR 300</strong></p>
-         <p>Discount: <strong id="discountAmount">PKR 0</strong></p>
+        <p>Discount: <strong id="discountAmount">PKR 0</strong></p>
         <p>Total Charges: <strong id="finalTotal">PKR 0</strong></p>
       </div>
 
@@ -260,7 +260,7 @@
     // Toggle billing address section
     const billingRadios = document.querySelectorAll('input[name="billingAddress"]');
     const billingFields = document.getElementById("billingAddressFields");
-    
+
     document.getElementById("checkoutForm").addEventListener("submit", function (e) {
       e.preventDefault(); // prevent actual form submission
 
@@ -281,6 +281,8 @@
       });
     });
 
+
+
     // Toggle card payment instructions
     const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
     const cardInstructions = document.getElementById("cardInstructions");
@@ -298,11 +300,11 @@
     // Trigger initial state (Card is not selected by default)
     document.querySelector('input[name="paymentMethod"]:checked')?.dispatchEvent(new Event("change"));
   </script>
-
-
-
-
-
+  <!-- Error Message Box -->
+  <div id="errorBox" class="error-box" style="display:none;">
+    <p id="errorMessage"></p>
+    <button onclick="hideError()">OK</button>
+  </div>
   <script src="JavaScript/checkout.js"></script>
 </body>
 
