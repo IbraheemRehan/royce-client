@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://royce-server.onrender.com/api/$1"
+    }
+  ]
+}

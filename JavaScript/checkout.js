@@ -1,0 +1,284 @@
+document.addEventListener("DOMContentLoaded", function () {
+  const cartItemsContainer = document.getElementById("checkoutCartItems");
+  const orderTotalEl = document.getElementById("orderTotal");
+  const checkoutTotalEl = document.getElementById("checkout-total");
+  const productTotalEl = document.getElementById("productTotal");
+  const deliveryFeeEl = document.getElementById("deliveryFee");
+  const finalTotalEl = document.getElementById("finalTotal");
+  const FREE_DELIVERY_THRESHOLD = 3000;
+  const DELIVERY_FEE = 300;
+
+  const data = JSON.parse(localStorage.getItem("checkoutData"));
+  console.log("Checkout data:", data);
+
+  if (data) {
+    const { items } = data;
+    let productTotal = 0;
+
+    if (cartItemsContainer && Array.isArray(items)) {
+      cartItemsContainer.innerHTML = items
+        .map((item) => {
+          const price = parseFloat(item.price) || 0;
+          const quantity = parseInt(item.quantity) || 1;
+          const total = price * quantity;
+          productTotal += total;
+          const imageSrc = item.image || (Array.isArray(item.images) ? item.images[0] : "");
+
+          const size = item.size || "N/A";
+
+          return `
+            <div class="checkout-item">
+              <img src="${imageSrc}" alt="${item.name}" class="checkout-img" />
+              <div class="checkout-info">
+                <p class="checkout-name">${item.name}</p>
+                <p class="checkout-size">Size: ${size}</p>
+                <p class="checkout-qty">Qty: ${quantity}</p>
+                <p class="checkout-price">Total: PKR ${total.toFixed(2)}</p>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+
+      const deliveryFee = productTotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
+      const discount = data.discount || 0;
+      const finalTotal = productTotal + deliveryFee - discount;
+
+
+      if (productTotalEl) productTotalEl.textContent = `PKR ${productTotal.toFixed(2)}`;
+      if (deliveryFeeEl) deliveryFeeEl.textContent = `PKR ${deliveryFee}`;
+      if (finalTotalEl) finalTotalEl.textContent = `PKR ${finalTotal.toFixed(2)}`;
+      if (orderTotalEl) orderTotalEl.textContent = `PKR ${finalTotal.toFixed(2)}`;
+      if (checkoutTotalEl) checkoutTotalEl.textContent = `${finalTotal.toFixed(2)}`;
+
+
+      //  Show discount on checkout if needed
+      const discountEl = document.getElementById("discountAmount");
+      if (discountEl) {
+        discountEl.textContent = `PKR ${discount.toFixed(2)}`;
+      }
+
+
+      // Store updated values in localStorage
+      localStorage.setItem(
+        "checkoutData",
+        JSON.stringify({ ...data, totalPrice: finalTotal, discount })
+      );
+    }
+  }
+});
+
+document.getElementById("checkoutForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const data = JSON.parse(localStorage.getItem("checkoutData"));
+  if (!data || !data.items || data.items.length === 0) {
+    alert("Cart is empty. Please add items.");
+    return;
+  }
+
+  const email = document.getElementById("email")?.value;
+  const phone = document.getElementById("phone")?.value;
+  const firstName = document.getElementById("firstName")?.value;
+  const lastName = document.getElementById("lastName")?.value;
+  const address = document.getElementById("address")?.value;
+  const city = document.getElementById("city")?.value;
+  const province = document.getElementById("province")?.value;
+  const postalCode = document.getElementById("postalCode")?.value;
+
+  const name = `${firstName} ${lastName}`;
+  const shippingAddress = `${address}, ${city}, ${province}, ${postalCode}`;
+
+  const paymentRadio = document.querySelector('input[name="paymentMethod"]:checked');
+  const billingChoice = document.querySelector('input[name="billingAddress"]:checked')?.value;
+  let billingAddress = shippingAddress;
+
+  if (!paymentRadio) {
+    alert("Please select a payment method.");
+    return;
+  }
+
+  const paymentMethod = paymentRadio.value;
+
+  if (billingChoice === "different") {
+    const billingAddr = document.getElementById("billingAddress")?.value;
+    const billingCity = document.getElementById("billingCity")?.value;
+    const billingProvince = document.getElementById("billingProvince")?.value;
+    const billingPostalCode = document.getElementById("billingPostalCode")?.value;
+
+    billingAddress = `${billingAddr}, ${billingCity}, ${billingProvince}, ${billingPostalCode}`;
+    if (!billingAddr || !billingCity || !billingProvince) {
+      alert("Please complete your billing address.");
+      return;
+    }
+  }
+
+  // Instead of this:
+// if (!email || !phone || !firstName || !lastName || !address || !city || !province || !paymentMethod) {
+//   showError("Please fill all required fields.");
+//   return;
+// }
+
+// Use this:
+const requiredFields = [
+  document.getElementById("email"),
+  document.getElementById("phone"),
+  document.getElementById("firstName"),
+  document.getElementById("lastName"),
+  document.getElementById("address"),
+  document.getElementById("city"),
+  document.getElementById("province") // Province dropdown
+];
+
+// If billing is different, also check these:
+if (billingChoice === "different") {
+  requiredFields.push(
+    document.getElementById("billingAddress"),
+    document.getElementById("billingCity"),
+    document.getElementById("billingProvince")
+  );
+}
+
+// Check for empty or unselected fields
+for (let field of requiredFields) {
+  if (!field || !field.value.trim()) {
+    showError("Please fill all required fields.");
+    field.scrollIntoView({ behavior: "smooth", block: "center" });
+    field.focus();
+    return;
+  }
+}
+
+for (let field of requiredFields) {
+  if (!field || !field.value.trim()) {
+    showError("Please fill all required fields.");
+    scrollToField(field);
+    return;
+  }
+}
+
+
+// Also check payment method
+if (!paymentRadio) {
+  showError("Please select a payment method.");
+  paymentRadio?.scrollIntoView({ behavior: "smooth", block: "center" });
+  return;
+}
+
+
+  // Prepare order payload with size
+  const orderPayload = {
+    customerName: name,
+    email,
+    phone,
+    paymentMethod,
+    totalPrice: Number(data.totalPrice?.toString().replace(/[^0-9.-]+/g, "") || 0),
+    discount: data.discount || 0, //  include discount here
+    items: data.items.map(item => ({
+      productId: item.productId || "unknown",
+      name: item.name,
+      size: item.size || "N/A",
+      quantity: item.quantity,
+      price: Number(item.price?.toString().replace(/[^0-9.-]+/g, "") || 0)
+    })),
+    address: {
+      shipping: shippingAddress,
+      billing: billingAddress
+    }
+  };
+  console.log(orderPayload);
+
+  try {
+    const response = await fetch("/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(orderPayload),
+      mode: "cors"
+    });
+
+    // Safely parse response
+    let data;
+    try {
+      data = await response.json();
+    } catch (jsonErr) {
+      data = null; // Handle empty JSON
+    }
+
+    if (!response.ok) {
+      console.error("Order error:", response.status, data);
+      alert("Order failed: " + (data?.error || "Unknown error"));
+    } else {
+      console.log("Order success:", data);
+      alert("Order placed successfully!");
+      localStorage.removeItem("cart");
+      localStorage.removeItem("checkoutData");
+    }
+
+  } catch (err) {
+    console.error("Order fetch failed:", err.message, err);
+  }
+
+
+});
+
+function closeCheckout() {
+  window.location.href = "index.html";
+}
+function showError(message) {
+  const errorBox = document.getElementById("errorBox");
+  const errorMessage = document.getElementById("errorMessage");
+  errorMessage.textContent = message;
+  errorBox.style.display = "block";
+}
+
+function hideError() {
+  document.getElementById("errorBox").style.display = "none";
+}
+
+function scrollToField(field) {
+  if (!field) return;
+
+  field.blur(); // Close keyboard
+  setTimeout(() => {
+    const yOffset = -100; // Adjust so field isn't at the very top
+    const y = field.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({ top: y, behavior: "smooth" });
+
+    // Delay the focus so scrolling finishes first
+    setTimeout(() => {
+      field.focus({ preventScroll: true });
+    }, 300);
+  }, 200);
+}
+
+
+
+console.log("🧠 localStorage.cart:", localStorage.getItem("cart"));
+localStorage.removeItem('cart');
+
+// 🔹 DEBUG: Check backend connectivity
+async function testBackendConnection() {
+  try {
+    const testResponse = await fetch("/api/orders/test", {
+      method: "GET",
+      mode: "cors"
+    });
+
+    if (testResponse.ok) {
+      console.log("✅ Backend reachable!");
+      const resData = await testResponse.text();
+      console.log("Backend response:", resData);
+    } else {
+      console.warn("⚠️ Backend reachable but returned error:", testResponse.status);
+    }
+  } catch (err) {
+    console.error("❌ Cannot reach backend:", err.message);
+  }
+}
+
+// Call it on DOMContentLoaded
+document.addEventListener("DOMContentLoaded", function () {
+  testBackendConnection();
+});
